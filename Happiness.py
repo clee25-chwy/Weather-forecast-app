@@ -1,23 +1,22 @@
 import streamlit as st
+import pandas as pd
 import plotly.express as px
 
 st.set_page_config(
-page_title="Weather",
+page_title="Happiness",
 )
-st.title("Weather Forecast for the Next Days!")
-place = st.text_input("Place: ")
-days = st.slider("Forecast Days", min_value=1, max_value=5,
-                 help="Select the number of forecasted days")
-option = st.selectbox("Select date to view",
-                      ("Temperature", "Sky"))
-st.subheader(f"{option} for the next {days} days in {place}")
-def get_data(days):
-    dates = ["2022-10-26", "2022-10-27", "2022-10-28"]
-    temperature = [10, 11, 15]
-    temperature = [days * i for i in temperature]
-    return dates, temperature
 
-d, t = get_data(days)
+st.title("In Search for Happiness")
+select_list = ["GDP", "Happiness", "Generosity"]
+option_1 = st.selectbox("Select data for x-axis", select_list, key="first")
+option_2 = st.selectbox("Select data for y-axis", select_list, key="second" )
 
-figure = px.line(x=d, y=t, labels={"x": "Date", "y": "Temperature(C)"})
+st.subheader(f"{option_1} and {option_2}")
+def get_data(option_1, option_2):
+    df = pd.read_csv("Happy.csv")
+    return df[option_1.lower()], df[option_2.lower()]
+
+o1, o2 = get_data(option_1, option_2)
+
+figure = px.scatter(x=o1, y=o2, labels={"x": option_1, "y": option_2})
 st.plotly_chart(figure)
