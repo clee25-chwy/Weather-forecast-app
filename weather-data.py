@@ -1,5 +1,6 @@
 import streamlit as st
 import plotly.express as px
+from backend import get_data
 
 st.set_page_config(
 page_title="Weather",
@@ -11,6 +12,9 @@ days = st.slider("Forecast Days", min_value=1, max_value=5,
 option = st.selectbox("Select date to view",
                       ("Temperature", "Sky"))
 st.subheader(f"{option} for the next {days} days in {place}")
+
+data = get_data(place, days, option)
+
 def get_data(days):
     dates = ["2022-10-26", "2022-10-27", "2022-10-28"]
     temperature = [10, 11, 15]
